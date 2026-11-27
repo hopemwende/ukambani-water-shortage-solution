@@ -83,3 +83,33 @@ ranked_villages(Ranked) :-
     findall(Neg-V, ( priority_score(V, S), Neg is -S ), Pairs),
     keysort(Pairs, Sorted),
     findall(V-S, ( member(N-V, Sorted), S is -N ), Ranked).
+%% ============================================================
+%%  MODULE 4: RECOMMENDED ACTIONS (DECISION RULES)
+%%  Owner: timothy njuguna
+%%  Question answered: "WHAT should be done for each village?"
+%%  Depends on: water_supply.pl, water_priority.pl
+%% ============================================================
+
+% Fix a broken source that the village can walk to
+recommend(V, repair(S)) :-
+    water_stressed(V), access(V, S, _), needs_repair(S).
+
+% Nothing to repair nearby -> new borehole
+recommend(V, drill_borehole) :-
+    water_stressed(V), \+ ( access(V, S, _), needs_repair(S) ).
+
+% Clinic/school village: emergency trucking while the fix is underway
+recommend(V, truck_water_now) :- priority(V).
+
+% Long-term dry-season fix: a sand dam where none is within walking distance
+sand_dam_candidate(V) :-
+    water_stressed(V), max_walk_km(Max),
+    \+ ( access(V, S, Km), Km =< Max, source(S, sand_dam, _, _) ).
+
+recommend(V, build_sand_dam) :- sand_dam_candidate(V).
+
+% action_plan(v, Actions): all recommendations for one village
+action_plan(V, Actions) :-
+    water_stressed(V),
+    findall(A, recommend(V, A), All),
+    sort(All, Actions).
