@@ -1,4 +1,4 @@
-# Community Logic Project: Vaccination Tracking and Ukambani Water Access
+# Community Logic Project:Ukambani Water Shortage Solution
 **Predicate Calculus (First-Order Logic) + Prolog**
 
 ## 1. Community needs
