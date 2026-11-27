@@ -37,7 +37,7 @@ swipl main.pl
 Kathonzweni ranks most urgent (score 40), then Mbitini (24), then Ngomeni (20). Repair borehole `s3` first, since it serves two stressed villages.
 
 
-## 7. Assumptions and limits
+## Assumptions and limits
 Sample data is fictional. Supply is not split between villages sharing one source (a real version would add allocation). Months-ago replaces real dates to keep the logic readable.
 
 
@@ -45,3 +45,11 @@ Sample data is fictional. Supply is not split between villages sharing one sourc
 Data is fictional. Supply is not split between villages sharing a source. Replace the facts with real Ukambani data.lus models.
 
 
+## Team
+|Name   |REG NO |
+|-------|-------|
+|1. Hope Mwende      |C026-01-0935/2025
+|2. Timothy Njuguna  |C026-01-0955/2025
+|3. Felix Otieno     |C026-01-0975/2025
+|4. Edmond Kipchumba |C026-01-0965/2025
+|5. Edwin Kariuki    |C026-01-0925/2025
