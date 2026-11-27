@@ -42,14 +42,4 @@ repair first: s3
 ## 7. Assumptions and limits
 Sample data is fictional. Supply is not split between villages sharing one source (a real version would add allocation). Months-ago replaces real dates to keep the logic readable.
 
-## 9. AI Usage
-AI was used to generate the predicate calculus models.
 
-## 8. Team
-|Name   |REG NO |
-|-------|-------|
-|1. Hope Mwende      |C026-01-0935/2025
-|2. Timothy Njuguna  |C026-01-0955/2025
-|3. Felix Otieno     |C026-01-0975/2025
-|4. Edmond Kipchumba |C026-01-0965/2025
-|5. Edwin Kariuki    |C026-01-0925/2025
