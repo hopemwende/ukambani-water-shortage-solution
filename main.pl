@@ -83,12 +83,7 @@ ranked_villages(Ranked) :-
     findall(Neg-V, ( priority_score(V, S), Neg is -S ), Pairs),
     keysort(Pairs, Sorted),
     findall(V-S, ( member(N-V, Sorted), S is -N ), Ranked).
-%% ============================================================
-%%  MODULE 4: RECOMMENDED ACTIONS (DECISION RULES)
-%%  Owner: timothy njuguna
-%%  Question answered: "WHAT should be done for each village?"
-%%  Depends on: water_supply.pl, water_priority.pl
-%% ============================================================
+
 
 % Fix a broken source that the village can walk to
 recommend(V, repair(S)) :-
@@ -113,6 +108,9 @@ action_plan(V, Actions) :-
     water_stressed(V),
     findall(A, recommend(V, A), All),
     sort(All, Actions).
+
+
+
 village_report(V) :-
     supply(V, Sup), demand(V, Dem),
     (   adequate(V)
@@ -120,7 +118,6 @@ village_report(V) :-
     ;   shortfall(V, Gap),
         format('~w: STRESSED, short by ~w L/day~n', [V, Gap])
     ).
-
 demo :-
     writeln('=== UKAMBANI WATER SITUATION ==='),
     forall(village(V, _), village_report(V)),
