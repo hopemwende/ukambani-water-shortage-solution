@@ -113,3 +113,37 @@ action_plan(V, Actions) :-
     water_stressed(V),
     findall(A, recommend(V, A), All),
     sort(All, Actions).
+village_report(V) :-
+    supply(V, Sup), demand(V, Dem),
+    (   adequate(V)
+    ->  format('~w: OK (supply ~w L, demand ~w L)~n', [V, Sup, Dem])
+    ;   shortfall(V, Gap),
+        format('~w: STRESSED, short by ~w L/day~n', [V, Gap])
+    ).
+
+demo :-
+    writeln('=== UKAMBANI WATER SITUATION ==='),
+    forall(village(V, _), village_report(V)),
+    writeln('=== PRIORITY RANKING (most urgent first) ==='),
+    ranked_villages(R),
+    forall(member(V-S, R), format('~w  (score ~w)~n', [V, S])),
+    writeln('=== REPAIR FIRST ==='),
+    forall(setof(S, repair_priority(S), L), format('~w~n', [L])),
+    writeln('=== ACTION PLAN PER VILLAGE ==='),
+    forall(action_plan(V, A), format('~w -> ~w~n', [V, A])).
+check(Name, Goal) :-
+    (   call(Goal) -> format('PASS  ~w~n', [Name])
+    ;   format('FAIL  ~w~n', [Name]) ).
+
+run_tests :-
+    check('kyamatu has enough water',      adequate(kyamatu)),
+    check('kathonzweni is stressed',       water_stressed(kathonzweni)),
+    check('mbitini shortfall = 4000',      shortfall(mbitini, 4000)),
+    check('broken s3 is not usable',       \+ usable(s3)),
+    check('water pan unusable in dry',     \+ usable(s5)),
+    check('s3 is repair priority',         repair_priority(s3)),
+    check('kathonzweni ranked first',      ( ranked_villages([V-_|_]), V == kathonzweni )),
+    check('mbitini: repair s3',            recommend(mbitini, repair(s3))),
+    check('ngomeni: drill borehole',       recommend(ngomeni, drill_borehole)),
+    check('mbitini needs no sand dam',     \+ sand_dam_candidate(mbitini)),
+    check('ngomeni needs sand dam',        sand_dam_candidate(ngomeni)).
