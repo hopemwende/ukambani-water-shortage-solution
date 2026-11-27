@@ -1,4 +1,5 @@
-# A Knowledge-Based System for Managing Water Scarcity in Ukambani
+# Ukambani Water Shortage: Predicate Calculus + Prolog
+
 ## Community need
 Ukambani relies on seasonal rivers, water pans and a few boreholes. In the dry season sources dry up, boreholes stay broken, and nobody ranks which village needs help first. This system uses logic to find stressed villages, rank them, and recommend actions.
 
@@ -24,11 +25,23 @@ swipl main.pl
 ?- demo.
 ?- run_tests.
 ```
-
+## Sample querries
+```bash
+% ?- water_stressed(V).
+% ?- shortfall(V, Gap).
+% ?- priority(V).
+% ?- repair_priority(S).
+% ?- recommend(V, Action).
+```
 ## Sample result
 Kathonzweni ranks most urgent (score 40), then Mbitini (24), then Ngomeni (20). Repair borehole `s3` first, since it serves two stressed villages.
 
-
+<<<<<<< HEAD
 ## 7. Assumptions and limits
 Sample data is fictional. Supply is not split between villages sharing one source (a real version would add allocation). Months-ago replaces real dates to keep the logic readable.
-           
+
+=======
+## Assumptions
+Data is fictional. Supply is not split between villages sharing a source. Replace the facts with real Ukambani data.lus models.
+>>>>>>> 31637bf3447f6d3a877b6262522d1f677bac4ec8
+
