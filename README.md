@@ -1,4 +1,4 @@
-# Community Logic Project:Ukambani Water Shortage Solution
+# A Knowledge-Based System for Managing Water Scarcity in Ukambani
 **Predicate Calculus (First-Order Logic) + Prolog**
 
 ## 1. Community needs
