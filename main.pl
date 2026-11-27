@@ -61,3 +61,25 @@ water_stressed(V) :- village(V, _), \+ adequate(V).
 % Shortfall(v,Gap): litres per day missing
 shortfall(V, Gap) :-
     water_stressed(V), supply(V, Sup), demand(V, Dem), Gap is Dem - Sup.
+
+% Priority(v): stressed AND has a clinic or school
+priority(V) :- water_stressed(V), has_clinic(V).
+priority(V) :- water_stressed(V), has_school(V).
+
+% RepairPriority(s): broken source that sits near a stressed village
+repair_priority(S) :-
+    needs_repair(S), access(V, S, _), water_stressed(V).
+
+% priority_score(v,Score): 1 point per 1000 L shortfall, +20 clinic, +10 school
+priority_score(V, Score) :-
+    water_stressed(V), shortfall(V, Gap),
+    Base is Gap // 1000,
+    ( has_clinic(V) -> C = 20 ; C = 0 ),
+    ( has_school(V) -> Sc = 10 ; Sc = 0 ),
+    Score is Base + C + Sc.
+
+% ranked_villages(List): villages sorted from most to least urgent
+ranked_villages(Ranked) :-
+    findall(Neg-V, ( priority_score(V, S), Neg is -S ), Pairs),
+    keysort(Pairs, Sorted),
+    findall(V-S, ( member(N-V, Sorted), S is -N ), Ranked).
