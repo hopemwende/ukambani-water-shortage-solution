@@ -1,6 +1,6 @@
 :- discontiguous village/2, source/4, access/3.
 
-%% ---------- FACTS ----------
+%% -------- FACTS ----------
 % village(Name, Population)
 village(kyamatu,  1200).
 village(mbitini,   800).
