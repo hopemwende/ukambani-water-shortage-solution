@@ -34,3 +34,15 @@ season(dry).
 % policy constants
 litres_per_person(20).     % daily minimum per person
 max_walk_km(2.0).          % acceptable walking distance
+%% ---------- RULES ----------
+seasonal(S) :- source(S, seasonal_river, _, _).
+seasonal(S) :- source(S, sand_dam, _, _).
+seasonal(S) :- source(S, water_pan, _, _).
+
+% usable now: working, and seasonal sources only count in the wet season
+usable(S) :- source(S, _, working, _), \+ seasonal(S).
+usable(S) :- source(S, _, working, _), seasonal(S), season(wet).
+% sand dams hold water into the dry season, so treat them as usable
+usable(S) :- source(S, sand_dam, working, _).
+
+needs_repair(S) :- source(S, _, broken, _).
