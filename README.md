@@ -1,45 +1,39 @@
 # A Knowledge-Based System for Managing Water Scarcity in Ukambani
-**Predicate Calculus (First-Order Logic) + Prolog**
+## Community need
+Ukambani relies on seasonal rivers, water pans and a few boreholes. In the dry season sources dry up, boreholes stay broken, and nobody ranks which village needs help first. This system uses logic to find stressed villages, rank them, and recommend actions.
 
-## 1. Community needs
-| # | Problem | Why it matters |
-|---|---------|----------------|
-|  | Ukambani water shortage | Seasonal rivers dry up, boreholes break and stay broken, and nobody ranks which village needs help first |
-
-## 2. Why logic fits
-Both are **rule-based decision problems**: facts (animals, villages, sources) plus rules (what is overdue, who is stressed) from which new facts are derived. This is exactly what Horn clauses in Prolog do.
-
-## 3. Predicate calculus models
-
-### Problem: Ukambani water
-**Predicates:** `Village(v,pop)`, `Source(s,type,status,cap)`, `Access(v,s,km)`, `Usable(s)`, `Adequate(v)`, `WaterStressed(v)`, `Priority(v)`, `NeedsRepair(s)`
+## Predicate calculus model
+**Predicates:** `Village(v,pop)`, `Source(s,type,status,cap)`, `Access(v,s,km)`, `Usable(s)`, `Supply(v,L)`, `Demand(v,L)`, `Adequate(v)`, `WaterStressed(v)`, `Priority(v)`, `NeedsRepair(s)`
 
 | Rule | First-order logic | Prolog |
 |------|-------------------|--------|
 | Needs repair | ∀s. Source(s,_,broken,_) → NeedsRepair(s) | `needs_repair/1` |
+| Usable | ∀s. Source(s,_,working,_) ∧ (¬Seasonal(s) ∨ Wet) → Usable(s) | `usable/1` |
 | Adequate | ∀v. Supply(v) ≥ Demand(v) → Adequate(v) | `adequate/1` |
 | Stressed | ∀v. Village(v,_) ∧ ¬Adequate(v) → WaterStressed(v) | `water_stressed/1` |
 | Priority | ∀v. WaterStressed(v) ∧ (HasClinic(v) ∨ HasSchool(v)) → Priority(v) | `priority/1` |
-| Repair first | ∀s. NeedsRepair(s) ∧ (∃v. Access(v,s,_) ∧ WaterStressed(v)) → RepairPriority(s) | `repair_priority/1` |
+| Repair first | ∀s. NeedsRepair(s) ∧ ∃v.(Access(v,s,_) ∧ WaterStressed(v)) → RepairPriority(s) | `repair_priority/1` |
+| Sand dam | ∀v. WaterStressed(v) ∧ ¬∃s.(Access(v,s,k) ∧ k ≤ 2 ∧ SandDam(s)) → SandDamCandidate(v) | `sand_dam_candidate/1` |
 
-`Demand(v) = population × 20 L/day`. `Supply(v)` = sum of capacities of usable sources within 2 km.
+`Demand = population × 20 L/day`. `Supply` = capacity of usable sources within 2 km.
 
-## 4. Technology integration (real-world delivery)
-`movement_permit/1` is checked at markets and checkpoints.
-- **Water:** county water office keeps the facts updated from field reports; `recommend/2` produces the weekly repair and trucking list.
-
-## 5. How to run
+## Run
 ```bash
-swipl src/water.pl         # ?- recommend(V,Action).
+cd src
+swipl main.pl
+?- demo.
+?- run_tests.
 ```
 
-## 6. Sample output
-```
-shortfall: mbitini 4000 | ngomeni 10000 | kathonzweni 30000 L/day
-repair first: s3
-```
+## Sample result
+Kathonzweni ranks most urgent (score 40), then Mbitini (24), then Ngomeni (20). Repair borehole `s3` first, since it serves two stressed villages.
 
+<<<<<<< HEAD
 ## 7. Assumptions and limits
 Sample data is fictional. Supply is not split between villages sharing one source (a real version would add allocation). Months-ago replaces real dates to keep the logic readable.
 
+=======
+## Assumptions
+Data is fictional. Supply is not split between villages sharing a source. Replace the facts with real Ukambani data.lus models.
+>>>>>>> 31637bf3447f6d3a877b6262522d1f677bac4ec8
 
